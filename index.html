@@ -240,7 +240,9 @@
         // ==========================================
         // 1. BASE DE DATOS DE TUS LINKS (CONFIGURACIÓN)
         // ==========================================
-        // Aquí es donde agregas tus nuevos videos/links.
+        // Aquí es donde agregas tus nuevos productos/links.
+        // IMPORTANTE: Para proteger el link, ahora debe estar codificado en Base64.
+        // Puedes usar una web como 'base64encode.org' para codificar tus links.
         // Copia y pega un bloque {...} y cambia los datos.
         
         const products = [
@@ -250,7 +252,8 @@
                 description: "Desbloquea tu Link directo Del Panel The King Cheat V194 .",
                 image: "tk.jpeg", // Pon aquí la URL de tu miniatura
                 price: 0.65,
-                directLink: "https://www.mediafire.com/file/ilkocgx1ejke89p/TheKingCheats_V194.apks/file?dkey=aegkguafx68&r=1265" // El link que se desbloquea
+                // El link que se desbloquea (codificado en Base64)
+                directLink: "aHR0cHM6Ly93d3cubWVkaWFmaXJlLmNvbS9maWxlL2lsa29jZ3gxZWprZTg5cC9UaGVLaW5nQ2hlYXRzX1YxOTQuYXBrL2ZpbGU/ZGtleT1hZWdrZ3VhZng2OCZyPTEyNjU="
             },
             // Para agregar otro, pon una coma arriba y pega esto:
             // {
@@ -259,7 +262,7 @@
             //     description: "Descripción...",
             //     image: "url_imagen",
             //     price: 0.25,
-            //     directLink: "url_del_link"
+            //     directLink: "CODIFICA_TU_LINK_AQUI_EN_BASE64"
             // }
         ];
 
@@ -297,7 +300,7 @@
                             <div id="paypal-container-${product.id}"></div>
 
                             <!-- Botón de Acceso (Oculto inicialmente) -->
-                            <a href="${product.directLink}" target="_blank" class="btn btn-access">
+                            <a href="#" onclick="goToLink('${product.directLink}', event)" class="btn btn-access">
                                 <i class="fas fa-external-link-alt"></i> Ir al Link
                             </a>
                         </div>
@@ -309,8 +312,21 @@
 
         // ==========================================
         // 3. LÓGICA DE PAGO (SIMULACIÓN)
-        // ==========================================
+        // ==========================================        
 
+        function goToLink(encodedUrl, event) {
+            event.preventDefault(); // Prevenir la navegación al '#'
+            // Decodifica la URL de Base64 y la abre en una nueva pestaña.
+            // Esto evita que el link sea visible directamente en el HTML.
+            try {
+                const decodedUrl = atob(encodedUrl); 
+                window.open(decodedUrl, '_blank');
+            } catch (e) {
+                console.error("Error al decodificar el link. Asegúrate que esté en formato Base64 correcto.", e);
+                alert("Hubo un error al intentar abrir el link. Contacta a soporte.");
+            }
+        }
+        
         function initiatePayPal(id, price) {
             const buyBtn = document.getElementById(`btn-buy-${id}`);
             const container = document.getElementById(`paypal-container-${id}`);
